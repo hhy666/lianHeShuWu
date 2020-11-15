@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN" "struts-2.1.7.dtd" >
+<struts>
+    <package name="book" extends="struts-default" namespace="/book">
+    <interceptors>
+       <interceptor name="adminInterceptor" class="com.baizhi.interceptor.AdminInterceptor"></interceptor>
+       <interceptor-stack name="myStack">
+           <interceptor-ref name="defaultStack"></interceptor-ref>
+           <interceptor-ref name="adminInterceptor"></interceptor-ref>
+       </interceptor-stack>
+    </interceptors>
+    <global-results>
+        <result name="relogin">/index.jsp</result>
+    </global-results>
+        <action name ="*" class="com.baizhi.action.BookAction" method="{1}">
+          <interceptor-ref name="myStack"></interceptor-ref>
+           <result name ="showAllOk">/back/book/show.jsp</result>
+           <result name ="deleteOk" type="redirectAction">showAll</result>
+           <result name ="queryOneOk">/back/book/update.jsp</result>
+           <result name ="updateOk" type="redirectAction">showAll</result>
+           <result name ="querySecondOk">/back/book/add.jsp</result>
+           <result name ="insertOk" type="redirectAction">showAll</result>
+           <result name ="fuzzyQueryOk">/back/book/show.jsp</result>
+        </action>
+    </package>
+	
+</struts>

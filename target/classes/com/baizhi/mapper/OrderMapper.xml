@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.OrderDao">
+    <insert id="insertOrder" parameterType="Order">
+        insert into d_order values(#{orderId},#{orderNo,jdbcType=VARCHAR},#{total},#{createDate,jdbcType=DATE},#{status,jdbcType=VARCHAR},#{addressId},#{userId})
+    </insert>
+    <resultMap type="order" id="orderMap">
+       <id column="oid" property="orderId"/>
+       <result column="order_no" property="orderNo"/>
+       <result column="total" property="total"/>
+       <result column="create_date" property="createDate"/>
+       <result column="status" property="status"/>
+       <association property="address" javaType="Address">
+           <id column="aid" property="addressId"/>
+           <result column="aname" property="name"/>
+           <result column="local" property="local"/>
+       </association>
+   </resultMap>
+   <select id="selectAllOrder" resultMap="orderMap" >
+       select o.order_id oid,o.order_no order_no,o.total total,o.create_date create_date,o.status status,a.address_id aid,a.name aname,a.local local from d_order o left join d_address a on o.address_id=a.address_id
+   </select>
+   <select id="selectOneOrder" resultType="Order">
+       select order_id orderId,order_no orderNo,total,create_date createDate,status,address_id addressId,user_id userId from d_order where order_id=#{orderId}
+   </select>
+</mapper>

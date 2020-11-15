@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN" "struts-2.1.7.dtd" >
+<struts>
+    <package name="user" extends="struts-default" namespace="/user">
+        <interceptors>
+       <interceptor name="adminInterceptor" class="com.baizhi.interceptor.AdminInterceptor">
+           <param name="includeMethods">queryAllUser,updateUser</param>
+       </interceptor>
+       <interceptor-stack name="myStack">
+           <interceptor-ref name="defaultStack"></interceptor-ref>
+           <interceptor-ref name="adminInterceptor"></interceptor-ref>
+       </interceptor-stack>
+    </interceptors>
+    <global-results>
+        <result name="relogin">/index.jsp</result>
+    </global-results>
+        <action name ="*" class="com.baizhi.action.UserAction" method="{1}">
+         <interceptor-ref name="myStack"></interceptor-ref> 
+         <result name="loginOk" type="redirectAction">
+             <param name="namespace">/main</param>
+			 <param name="actionName">main</param>
+         </result>
+         <result name="loginError">/front/user/login_form.jsp</result>
+         <result name="addUserOk" type="redirectAction">generate</result>
+         <result name="addUserError">/front/user/register_form.jsp</result>
+         <result name="generateOk">/front/user/verify_form.jsp</result>
+         <result name="activeOk" >/front/user/register_ok.jsp</result>
+         <result name="activeError" type="redirectAction">generate</result>
+         <result name="exitOk" type="redirect">/front/user/login_form.jsp</result>
+         <result name="queryAllUserOk" >/back/user/show.jsp</result>
+         <result name="updateOk" type="redirectAction">queryAllUser</result>
+        </action>
+    </package>
+	
+</struts>

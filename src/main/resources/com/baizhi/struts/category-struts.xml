@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN" "struts-2.1.7.dtd" >
+<struts>
+	 <package name="category" extends="struts-default" namespace="/category">
+	  <interceptors>
+       <interceptor name="adminInterceptor" class="com.baizhi.interceptor.AdminInterceptor"></interceptor>
+       <interceptor-stack name="myStack">
+           <interceptor-ref name="defaultStack"></interceptor-ref>
+           <interceptor-ref name="adminInterceptor"></interceptor-ref>
+       </interceptor-stack>
+    </interceptors>
+    <global-results>
+        <result name="relogin">/index.jsp</result>
+    </global-results>
+	     <action name="*" class="com.baizhi.action.CategoryAction" method="{1}">
+	         <interceptor-ref name="myStack"></interceptor-ref>
+	         <result name="queryOk">/back/category/show.jsp</result>
+	         <result name="queryFirstOk">/back/category/add-second.jsp</result>
+	         <result name="addOk" type="redirectAction">queryAll</result>
+	         <result name="deleteOk" type="redirectAction">queryAll</result>
+	         <result name="addFirstOk" type="redirectAction">queryAll</result>
+	     </action>
+	 </package>
+	
+</struts>

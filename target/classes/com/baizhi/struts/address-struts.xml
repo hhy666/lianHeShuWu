@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN" "struts-2.1.7.dtd" >
+<struts>
+    <package name="address" extends="struts-default" namespace="/address">
+    <interceptors>
+       <interceptor name="userInterceptor" class="com.baizhi.interceptor.UserInterceptor"></interceptor>
+       <interceptor-stack name="myStack">
+           <interceptor-ref name="defaultStack"></interceptor-ref>
+           <interceptor-ref name="userInterceptor"></interceptor-ref>
+       </interceptor-stack>
+    </interceptors>
+    <global-results>
+        <result name="relogin">/front/user/login_form.jsp</result>
+        <result name="reactive" type="redirectAction">
+            <param name="namespace">/user</param>
+            <param name="actionName">generate</param>
+        </result>
+    </global-results>
+        <action name ="*" class="com.baizhi.action.AddressAction" method="{1}">
+         <interceptor-ref name="myStack"></interceptor-ref>
+         <result name="queryAllByUserOk">/front/order/address_form.jsp</result>
+         <result name="queryOneOk">/front/order/address_form.jsp</result>
+         <result name="addAddressOk">/front/order/order_ok.jsp</result>
+        </action>
+    </package>
+	
+</struts>

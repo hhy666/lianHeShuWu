@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN" "struts-2.1.7.dtd" >
+<struts>
+    <package name="main" extends="struts-default" namespace="/main">
+        <action name ="*" class="com.baizhi.action.MainAction" method="{1}">
+            <result name="mainOk">/front/main/main.jsp</result>
+            <result name="queryOneOk">/front/main/book_detail.jsp</result>
+            <result name="querySecondOk">/front/main/book_list.jsp</result>
+        </action>
+    </package>
+	
+</struts>

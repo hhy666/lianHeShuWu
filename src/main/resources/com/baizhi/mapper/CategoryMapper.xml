@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.CategoryDao">
+   <resultMap type="category" id="categoryMap">
+       <id column="dcategory_id" property="categoryId"/>
+       <result column="dname" property="name"/>
+       <result column="dparent_id" property="parentId"/>
+       <result column="dlevels" property="levels"/>
+       <association property="category" javaType="Category">
+           <id column="scategory_id" property="categoryId"/>
+           <result column="sname" property="name"/>
+           <result column="sparent_id" property="parentId"/>
+           <result column="slevels" property="levels"/>
+       </association>
+   </resultMap>
+   <select id ="selectAll" resultMap="categoryMap">
+      select d.category_id dcategory_id,d.name dname, d.parent_id dparent_id,d.levels dlevels,
+      s.category_id scategory_id,s.name sname,s.parent_id sparent_id,s.levels slevels 
+      from d_category d left join d_category s on d.parent_id=s.category_id
+   </select>
+   <select id ="selectFirst" resultType="Category">
+       select category_id categoryId,name,parent_id parentId,levels from d_category where levels='1'
+   </select>
+   <insert id="insertSecond" parameterType="Category">
+       insert into d_category values(#{categoryId},#{name},#{parentId},#{levels})
+   </insert>
+   <select id="selectLevels" parameterType="String" resultType="Integer">
+       select levels from d_category where category_id=#{categoryId}
+   </select>
+   <delete id="deleteCategory" parameterType="String">
+       delete from d_category where category_id = #{categoryId}
+   </delete>
+   <insert id="insertFirst" parameterType="Category">
+       insert into d_category(category_id,name,levels) values(#{categoryId},#{name},#{levels})
+   </insert>
+   <select id ="selectParentId" resultType="Category" parameterType="String">
+       select category_id categoryId,name,parent_id parentId,levels from d_category where parent_id=#{categoryId}
+   </select>
+    <resultMap type="category" id="frontMap">
+       <id column="dcategory_id" property="categoryId"/>
+       <result column="dname" property="name"/>
+       <result column="dparent_id" property="parentId"/>
+       <result column="dlevels" property="levels"/>
+       <collection property="categories" ofType="Category">
+           <id column="scategory_id" property="categoryId"/>
+           <result column="sname" property="name"/>
+           <result column="sparent_id" property="parentId"/>
+           <result column="slevels" property="levels"/>
+       </collection>
+   </resultMap>
+   <select id="selectAllOnFront" resultMap="frontMap">
+      select d.category_id dcategory_id,d.name dname, d.parent_id dparent_id,d.levels dlevels,
+      s.category_id scategory_id,s.name sname,s.parent_id sparent_id,s.levels slevels 
+      from d_category d join d_category s on d.category_id=s.parent_id
+   </select>
+    <resultMap type="category" id="firstMap">
+       <id column="dcategory_id" property="categoryId"/>
+       <result column="dname" property="name"/>
+       <result column="dparent_id" property="parentId"/>
+       <result column="dlevels" property="levels"/>
+       <collection property="categories" ofType="Category">
+           <id column="scategory_id" property="categoryId"/>
+           <result column="sname" property="name"/>
+           <result column="sparent_id" property="parentId"/>
+           <result column="slevels" property="levels"/>
+       </collection>
+   </resultMap>
+   <select id="selectFirstOnId" resultMap="firstMap">
+      select d.category_id dcategory_id,d.name dname, d.parent_id dparent_id,d.levels dlevels,
+      s.category_id scategory_id,s.name sname,s.parent_id sparent_id,s.levels slevels 
+      from d_category d join d_category s on d.category_id=s.parent_id where d.category_id=#{pid}
+   </select>
+   <resultMap type="category" id="secondMap">
+       <id column="dcategory_id" property="categoryId"/>
+       <result column="dname" property="name"/>
+       <result column="dparent_id" property="parentId"/>
+       <result column="dlevels" property="levels"/>
+       <collection property="books" ofType="Book">
+           <id column="bbook_id" property="bookId"/>
+           <result column="bname" property="name"/>
+           <result column="bauthor" property="author"/>
+           <result column="bcover" property="cover"/>
+           <result column="bpress" property="press"/>
+           <result column="bpress_date" property="pressDate"/>
+           <result column="bedition" property="edition"/>
+           <result column="bprint_date" property="printDate"/>
+           <result column="bimporession" property="impression"/>
+           <result column="bisbn" property="isbn"/>
+           <result column="bword_num" property="wordNum"/>
+           <result column="bpage_num" property="pageNum"/>
+           <result column="bsizes" property="sizes"/>
+           <result column="bpaper" property="paper"/>
+           <result column="bpack" property="pack"/>
+           <result column="bprice" property="price"/>
+           <result column="bdprice" property="dprice"/>
+           <result column="bcreate_date" property="createDate"/>
+           <result column="beditor_recomment" property="beditorRecomment"/>
+           <result column="bcontent_abstract" property="contentAbstract"/>
+           <result column="bauthor_abstract" property="authorAbstract"/>
+           <result column="bdirector" property="director"/>
+           <result column="bmedia_commentary" property="mediaCommentary"/>
+           <result column="bale" property="ale"/>
+           <result column="bstock" property="stock"/>
+           <result column="bcategory_id" property="categoryId"/> 
+       </collection>
+   </resultMap>
+   <select id="selectSecond" resultMap="secondMap">
+      select d.category_id dcategory_id,d.name dname, d.parent_id dparent_id,d.levels dlevels,
+      b.book_id bbook_d,b.name bname,b.author bauthor,b.cover bcover,b.press bpress,b.press_date bpressDate,b.edition bediton,b.print_date bprint_date,b.impression bimpression,
+      b.isbn bisbn,b.word_num bword_num,b.page_num bpage_num,b.sizes bsizes,b.paper bpaper,b.pack bpack,b.price price,b.dprice dprice,b.create_date bcreate_date,
+      b.editor_recomment beditor_recomment,b.content_abstract bcontent_abstract,b.author_abstract bauthor_abstract,b.director bdirector,b.media_commentary bmedia_commentary,
+      b.ale bale,b.stock bstock,b.category_id bcategory_id
+      from d_category d left join d_book b on d.category_id =b.category_id where d.category_id=#{categoryId}
+   </select>
+</mapper>

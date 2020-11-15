@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.BookDao">
+   <select id="selectAll" resultType="Book">
+       select book_id bookId ,name ,author,cover,press,press_date pressDate ,edition ,
+       print_date printDate,impression ,isbn,word_num wordNum,page_num pageNum ,sizes,paper ,
+       pack ,price ,dprice ,create_date createDate,editor_recomment editorRecomment,content_abstract contentAbstract,
+       author_abstract authorAbstract,director ,media_commentary mediaCommentary,ale,stock,category_id categoryId  from d_book
+   </select>
+   <delete id="deleteBook" parameterType="String">
+       delete from d_book where name=#{name}
+   </delete>
+   <select  id ="selectSecond" resultType="Category">
+       select category_id categoryId,name,parent_id parentId,levels from d_category where levels='2'
+   </select>
+   <select id="queryBookById" resultType="Book" parameterType="String">
+       select book_id bookId, name ,author,cover,press,press_date pressDate ,edition ,
+       print_date printDate,impression ,isbn,word_num wordNum,page_num pageNum ,sizes,paper ,
+       pack ,price ,dprice ,create_date createDate,editor_recomment editorRecomment,content_abstract contentAbstract,
+       author_abstract authorAbstract,director ,media_commentary mediaCommentary,ale,stock,category_id categoryId from d_book where book_id=#{bookId} 
+   </select>
+   <update id="updateBook" parameterType="Book">
+      update d_book set name=#{name,jdbcType=VARCHAR},author=#{author,jdbcType=VARCHAR},cover=#{cover,jdbcType=VARCHAR},press=#{press,jdbcType=VARCHAR},press_date=#{pressDate,jdbcType=DATE},
+	  edition=#{edition,jdbcType=VARCHAR},print_date=#{printDate,jdbcType=DATE},impression=#{impression,jdbcType=VARCHAR},isbn=#{isbn,jdbcType=VARCHAR},word_num=#{wordNum,jdbcType=NUMERIC},page_num=#{pageNum,jdbcType=NUMERIC},sizes=#{sizes,jdbcType=VARCHAR},
+      paper=#{paper,jdbcType=VARCHAR},pack=#{pack,jdbcType=VARCHAR},price=#{price,jdbcType=NUMERIC},dprice=#{dprice,jdbcType=NUMERIC},create_date=#{createDate,jdbcType=DATE},editor_recomment=#{editorRecomment,jdbcType=VARCHAR},content_abstract=#{contentAbstract,jdbcType=VARCHAR},
+  	  author_abstract=#{authorAbstract,jdbcType=VARCHAR},director=#{director,jdbcType=VARCHAR},media_commentary=#{mediaCommentary,jdbcType=VARCHAR},ale=#{ale,jdbcType=NUMERIC},stock=#{stock,jdbcType=NUMERIC},category_id=#{categoryId,jdbcType=VARCHAR} where book_id = #{bookId} 
+   </update>
+   <insert id ="insertBook" parameterType="Book">
+       insert into d_book values(#{bookId},#{name,jdbcType=VARCHAR},#{author,jdbcType=VARCHAR},#{cover,jdbcType=VARCHAR},#{press,jdbcType=VARCHAR},#{pressDate,jdbcType=DATE},
+  	   #{edition,jdbcType=VARCHAR},#{printDate,jdbcType=DATE},#{impression,jdbcType=VARCHAR},#{isbn,jdbcType=VARCHAR},#{wordNum,jdbcType=NUMERIC},#{pageNum,jdbcType=NUMERIC},#{sizes,jdbcType=VARCHAR},
+  	   #{paper,jdbcType=VARCHAR},#{pack,jdbcType=VARCHAR},#{price,jdbcType=NUMERIC},#{dprice,jdbcType=NUMERIC},#{createDate,jdbcType=DATE},#{editorRecomment,jdbcType=VARCHAR},#{contentAbstract,jdbcType=VARCHAR},
+  	   #{authorAbstract,jdbcType=VARCHAR},#{director,jdbcType=VARCHAR},#{mediaCommentary,jdbcType=VARCHAR},#{ale,jdbcType=NUMERIC},#{stock,jdbcType=NUMERIC},#{categoryId,jdbcType=VARCHAR})
+       
+   </insert>
+   <select id ="fuzzySelectBook" resultType="Book">
+       select book_id bookId ,name ,author,cover,press,press_date pressDate ,edition ,
+       print_date printDate,impression ,isbn,word_num wordNum,page_num pageNum ,sizes,paper ,
+       pack ,price ,dprice ,create_date createDate,editor_recomment editorRecomment,content_abstract contentAbstract,
+       author_abstract authorAbstract,director ,media_commentary mediaCommentary,ale,stock,category_id categoryId  from d_book
+       <where>
+           <if test="type == 'name'">name like '%${input}%'</if>
+           <if test="type == 'author'">author like '%${input}%'</if>
+            <if test="type == 'press'">press like '%${input}%'</if>
+       </where>
+   </select>
+   <select id ="selectRecommend" resultType="Book">
+       select * from (select rownum, book_id bookId ,name ,author,cover,press,press_date pressDate ,edition ,
+       print_date printDate,impression ,isbn,word_num wordNum,page_num pageNum ,sizes,paper ,
+       pack ,price ,dprice ,create_date createDate,editor_recomment editorRecomment,content_abstract contentAbstract,
+       author_abstract authorAbstract,director ,media_commentary mediaCommentary,ale,stock,category_id categoryId from d_book
+       order by ale desc)where rownum between 1 and 2
+   </select>
+   <select id ="selectHotBook" resultType="Book">
+       select * from (select rownum rn, book_id bookId ,name ,author,cover,press,press_date pressDate ,edition ,
+       print_date printDate,impression ,isbn,word_num wordNum,page_num pageNum ,sizes,paper ,
+       pack ,price ,dprice ,create_date createDate,editor_recomment editorRecomment,content_abstract contentAbstract,
+       author_abstract authorAbstract,director ,media_commentary mediaCommentary,ale,stock,category_id categoryId from d_book
+       order by ale desc)where rn between 1 and 8
+   </select>
+   <select id ="selectNewBook" resultType="Book">
+       select * from (select rownum rn, book_id bookId ,name ,author,cover,press,press_date pressDate ,edition ,
+       print_date printDate,impression ,isbn,word_num wordNum,page_num pageNum ,sizes,paper ,
+       pack ,price ,dprice ,create_date createDate,editor_recomment editorRecomment,content_abstract contentAbstract,
+       author_abstract authorAbstract,director ,media_commentary mediaCommentary,ale,stock,category_id categoryId from d_book
+       order by createDate)where rn between 1 and 8
+   </select>
+   <select id ="selectHotBoard" resultType="Book">
+       select * from (select rownum rn, book_id bookId ,name ,author,cover,press,press_date pressDate ,edition ,
+       print_date printDate,impression ,isbn,word_num wordNum,page_num pageNum ,sizes,paper ,
+       pack ,price ,dprice ,create_date createDate,editor_recomment editorRecomment,content_abstract contentAbstract,
+       author_abstract authorAbstract,director ,media_commentary mediaCommentary,ale,stock,category_id categoryId from d_book
+       order by ale desc, create_date desc)where rn between 1 and 8
+   </select>
+   <select id="selectFirst" resultType="Book">
+       select * from(
+       select rownum rn , a.book_id bookId ,a.name ,a.author,a.cover,a.press,a.press_date pressDate ,a.edition ,
+       a.print_date printDate,a.impression ,a.isbn,a.word_num wordNum,a.page_num pageNum ,a.sizes,a.paper ,
+       a.pack ,a.price ,a.dprice ,a.create_date createDate,a.editor_recomment editorRecomment,a.content_abstract contentAbstract,
+       a.author_abstract authorAbstract,a.director ,a.media_commentary mediaCommentary,a.ale,a.stock,a.category_id categoryId  from d_book a left join d_category b on a.category_id=b.category_id
+       where b.parent_id=#{pid})where rn between #{begin} and #{end} 
+   </select>
+   <select id="selectSecondBook" resultType="Book">
+       select * from(
+       select rownum rn , book_id bookId ,name ,author,cover,press,press_date pressDate ,edition ,
+       print_date printDate,impression ,isbn,word_num wordNum,page_num pageNum ,sizes,paper ,
+       pack ,price ,dprice ,create_date createDate,editor_recomment editorRecomment,content_abstract contentAbstract,
+       author_abstract authorAbstract,director ,media_commentary mediaCommentary,ale,stock,category_id categoryId  from d_book
+       where category_id=#{cid})where rn between #{begin} and #{end}
+   </select>
+   <select id="selectFirstRecords" resultType="Integer">
+       select count(*) from(
+       select a.book_id bookId ,a.name ,a.author,a.cover,a.press,a.press_date pressDate ,a.edition ,
+       a.print_date printDate,a.impression ,a.isbn,a.word_num wordNum,a.page_num pageNum ,a.sizes,a.paper ,
+       a.pack ,a.price ,a.dprice ,a.create_date createDate,a.editor_recomment editorRecomment,a.content_abstract contentAbstract,
+       a.author_abstract authorAbstract,a.director ,a.media_commentary mediaCommentary,a.ale,a.stock,a.category_id categoryId  from d_book a left join d_category b on a.category_id=b.category_id
+       where b.parent_id=#{pid})
+   </select>
+   <select id="selectSecondRecords" resultType="Integer">
+       select count(*)from(
+       select book_id bookId ,name ,author,cover,press,press_date pressDate ,edition ,
+       print_date printDate,impression ,isbn,word_num wordNum,page_num pageNum ,sizes,paper ,
+       pack ,price ,dprice ,create_date createDate,editor_recomment editorRecomment,content_abstract contentAbstract,
+       author_abstract authorAbstract,director ,media_commentary mediaCommentary,ale,stock,category_id categoryId  from d_book
+       where category_id=#{cid})
+   </select>
+</mapper>

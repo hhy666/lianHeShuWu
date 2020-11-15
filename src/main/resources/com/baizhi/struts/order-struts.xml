@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN" "struts-2.1.7.dtd" >
+<struts>
+    <package name="order" extends="struts-default" namespace="/order">
+    <interceptors>
+       <interceptor name="adminInterceptor" class="com.baizhi.interceptor.AdminInterceptor">
+           <param name="includeMethods">queryAllOrder</param>
+       </interceptor>
+       <interceptor-stack name="myStack">
+           <interceptor-ref name="defaultStack"></interceptor-ref>
+           <interceptor-ref name="adminInterceptor"></interceptor-ref>
+       </interceptor-stack>
+    </interceptors>
+    <global-results>
+        <result name="relogin">/index.jsp</result>
+    </global-results>
+        <action name ="*" class="com.baizhi.action.OrderAction" method="{1}">
+        <interceptor-ref name="myStack"></interceptor-ref>
+           <result name="addOrderOk">/front/order/order_ok.jsp</result>
+           <result name="queryAllOrderOk">/back/order/show.jsp</result>
+        </action>
+    </package>
+	
+</struts>
